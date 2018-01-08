@@ -90,16 +90,24 @@ namespace ConsoleApp1
         {
             Console.WriteLine("Player {0}, where would you like to play? (Board position 0-8)", player);
             ShowBoard(board);
+           
             int choice = Convert.ToInt32(Console.ReadLine());
-
-            if (player == "One")
+            if (board[choice] != "X" && board[choice] != "O")
             {
-                board[choice] = playerOne;
+                if (player == "One")
+                {
+
+                    board[choice] = playerOne;
+                }
+                else
+                {
+                    board[choice] = playerTwo;
+                }
             } else
             {
-                board[choice] = playerTwo;
+                Console.WriteLine("Invalid selection!");
+                PlayerTurn(player, board, playerOne, playerTwo);
             }
-
         }
 
         public static void ShowBoard(string[] board)
