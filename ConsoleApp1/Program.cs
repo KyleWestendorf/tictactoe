@@ -13,7 +13,7 @@ namespace ConsoleApp1
 
             NewGame();
 
-            }// end of main
+        }// end of main
 
         private static void NewGame()
         {
@@ -39,10 +39,12 @@ namespace ConsoleApp1
                 Console.WriteLine("One or two?");
                 string answer = Console.ReadLine();
 
-                // Player One Game
+             // Player One Game
                 if (answer == "1")
                 {
-
+                    string playerOne = "";
+                    string playerTwo = "";
+                    string players = "1";
 
                     Console.WriteLine("Do you want to Play as X or O?");
                     Console.WriteLine("1. X");
@@ -50,21 +52,25 @@ namespace ConsoleApp1
                     string side = Console.ReadLine();
                     if (side == "1")
                     {
-                        side = "X";
+                        playerOne = "X";
+                        playerTwo = "O";
                     }
                     else
                     {
-                        side = "O";
+                        playerOne = "X";
+                        playerTwo = "O";
                     }
                     Console.WriteLine("You chose {0}", side);
+                    NewAITurn(players, board, playerOne, playerTwo, turn, counter);
                     Console.ReadLine();
 
 
                 }
 
-                // Player Two Game
+             // Player Two Game
                 else if (answer == "2")
                 {
+                    string players = "2";
                     Console.WriteLine("1. X");
                     Console.WriteLine("2. O");
                     Console.WriteLine("Player One: Press 1 for X, two for O?");
@@ -82,7 +88,7 @@ namespace ConsoleApp1
                     }
                     Console.WriteLine("You chose {0}. Player Two is {1}", playerOne, playerTwo);
 
-                    NewTurn(board, playerOne, playerTwo, turn, counter);
+                    NewTurn(players, board, playerOne, playerTwo, turn, counter);
 
                     Console.ReadLine();
                 }
@@ -91,7 +97,7 @@ namespace ConsoleApp1
 
 
             }// end of while
-        }
+        } // End of NewGame();
 
         private static void PlayerTurn(string player, string[] board, string playerOne, string playerTwo)
             {
@@ -124,9 +130,10 @@ namespace ConsoleApp1
                 Console.WriteLine("{0} | {1} | {2}", board[6], board[7], board[8]);
             }
 
-            private static void NewTurn(string[] board, string playerOne, string playerTwo, string turn, int counter)
+            private static void NewTurn(string players, string[] board, string playerOne, string playerTwo, string turn, int counter)
             {
-
+            if (players == "2")
+            {
                 while (turn == "playerOne")
                 {
                     string player = "One";
@@ -145,11 +152,41 @@ namespace ConsoleApp1
                 }
 
                 Console.WriteLine("This is the counter: {0}", counter);
-                NewTurn(board, playerOne, playerTwo, turn, counter);
+                NewTurn(players, board, playerOne, playerTwo, turn, counter);
+            } else
+            {
+                while (turn == "playerOne")
+                {
+                    string player = "One";
+                    PlayerTurn(player, board, playerOne, playerTwo);
+                    CheckWin(board, counter);
+                    turn = "playerTwo";
+                    counter++;
+                }
+                while (turn == "playerTwo")
+                {
+                    string player = "Two";
+                    PlayerTurn(player, board, playerOne, playerTwo);
+                    CheckWin(board, counter);
+                    turn = "playerOne";
+                    counter++;
+                }
+
+                Console.WriteLine("This is the counter: {0}", counter);
+                NewTurn(players, board, playerOne, playerTwo, turn, counter);
+            }
 
             }
 
-            private static void CheckWin(string[] board, int counter)
+        private static void AiTurn(string[] board, int counter, string playerTwo)
+        {
+            if (board[4] == "4" && counter == 1)
+            {
+                board[4] = playerTwo;
+            }
+        }
+
+        private static void CheckWin(string[] board, int counter)
             {
                 if (board[0] == board[1] && board[1] == board[2])
                 {
@@ -223,6 +260,33 @@ namespace ConsoleApp1
                 Replay();
 
             }
+
+           
+        }
+        // One player Methods
+        public static void NewAITurn(string players, string[] board, string playerOne, string playerTwo, string turn, int counter)
+        {
+
+            while (turn == "playerOne")
+            {
+                string player = "One";
+                PlayerTurn(player, board, playerOne, playerTwo);
+                CheckWin(board, counter);
+                turn = "playerTwo";
+                counter++;
+            }
+            while (turn == "playerTwo")
+            {
+
+                AiTurn(board, counter, playerTwo);
+                CheckWin(board, counter);
+                turn = "playerOne";
+                counter++;
+            }
+
+            Console.WriteLine("This is the counter: {0}", counter);
+            NewAITurn(players, board, playerOne, playerTwo, turn, counter);
+
         }
     }
 }
